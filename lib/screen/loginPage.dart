@@ -1,27 +1,41 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import '../authService.dart';
-import 'signupPage.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final VoidCallback showRegisterPage;
+  const LoginPage({Key? key,required this.showRegisterPage}): super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //Text Controller
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+
+  Future signIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passController.text.trim(),
+    );
+  }
   @override
+  void dispose(){
+    _emailController.dispose();
+    _passController.dispose();
+    super.dispose();
+
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         children: [
           Container(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
                 children: [
                   //Title
@@ -91,6 +105,13 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(10)
                                   )
                                 ),
+                                validator: (value) {
+                                  if (value!.isEmpty || !RegExp(r'^[\w-]+@[\w]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
+                                    return "Enter the correct email";
+                                  } else {
+                                    return null;
+                                  }
+                                },
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 5),
@@ -135,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                                         style: GoogleFonts.poppins(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 13,
-                                            color: Color.fromRGBO(64, 123, 255, 1)
+                                            color: Color.fromRGBO(12, 53, 106, 1)
                                         ),
                                       ),
                                     ),
@@ -153,31 +174,18 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            final message = await AuthService().login(
-                              email: _emailController.text,
-                              password: _passController.text,
-                            );
-                            if (message!.contains('Success')) {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) => const SignUp(),
-                                ),
-                              );
-                            }
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(message),
-                              ),
-                            );
+                            signIn();
                           },
                           child: Text(
                             'Login',
                             style: GoogleFonts.poppins(
+                                color: Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500
                             ),
                           ),
                           style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(Color.fromRGBO(12, 53, 106, 1)),
                               minimumSize: MaterialStateProperty.all(Size(double.infinity, 50)),
                               shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
@@ -197,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+                            signIn();
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Don't have an account?",
+                                "Don't have an account? ",
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
@@ -242,12 +250,13 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               InkWell(
+                                onTap: widget.showRegisterPage,
                                 child: Text(
                                   "Sign Up",
                                   style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 13,
-                                      color: Color.fromRGBO(64, 123, 255, 1)
+                                      color: Color.fromRGBO(12, 53, 106, 1)
                                   ),
                                 ),
                               ),
@@ -262,7 +271,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
           )
         ],
-
       ),
     );
   }

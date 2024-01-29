@@ -42,6 +42,13 @@ dependencies:
   firebase_core: ^2.24.0
   firebase_database: ^10.3.6
   firebase_auth: ^4.15.0
+  shared_preferences: ^2.2.2
+  curved_navigation_bar: ^1.0.3
+  google_nav_bar: ^5.0.6
+  cloud_firestore: ^4.13.6
+  flashy_tab_bar2: ^0.0.6
+  buttons_tabbar: ^1.3.8
+  dart_nats: ^0.6.2
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +77,8 @@ flutter:
     - lib/images/Parking-rafiki.png
     - lib/images/googleIcon.png
     - lib/images/carIcon.png
+    - lib/images/signUp.png
+    - lib/images/profile.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

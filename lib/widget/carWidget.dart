@@ -1,9 +1,11 @@
-  import 'package:firebase_database/firebase_database.dart';
-  import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
   
   class carWidget extends StatefulWidget {
-    const carWidget({Key? key, required this.spotNumber}) : super(key: key);
+    const carWidget({Key? key, required this.spotNumber, required this.position}) : super(key: key);
     final int spotNumber;
+    final String position;
   
     @override
     State<carWidget> createState() => _carWidgetState();
@@ -38,24 +40,39 @@
           width: double.infinity,
           height: double.infinity,
           child: dataValue == 1
-              ? Transform.rotate(
-            angle: 270 * 3.14/180,
-            child: Transform.scale(
-              scale: 1.3,
-              child: Image.asset(
-                "lib/images/carIcon.png",
-              ),
-            )
-          )
+              ? widget.position == "left"
+                ? Transform.rotate(
+                  angle: 90 * 3.14/180,
+                  child: Transform.scale(
+                    scale: 1,
+                    child: Image.asset(
+                      "lib/images/carIcon.png",
+                    ),
+                  )
+                )
+                : Transform.rotate(
+                  angle: 270 * 3.14/180,
+                  child: Transform.scale(
+                    scale: 1,
+                    child: Image.asset(
+                      "lib/images/carIcon.png",
+                    ),
+                  )
+                )
               : Center(
-            child: Text(
-                "Spot ${widget.spotNumber}"
-            ),
+                child: Text(
+                  "SPOT ${widget.spotNumber}",
+                  style: GoogleFonts.poppins(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
           ),
           decoration: BoxDecoration(
-              border: Border(top: BorderSide(width: 1), left: BorderSide(width: 1),bottom: BorderSide(width: 1)),
+              border: Border.symmetric(horizontal: BorderSide(width: 0.5, color: Colors.black.withOpacity(0.5))),
           ),
         ),
+        flex: 2,
       );
     }
   }
