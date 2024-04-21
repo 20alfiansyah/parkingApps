@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:parkingapps/screen/profilePage.dart';
 import 'package:parkingapps/screen/slotPage.dart';
+import 'package:dart_nats/dart_nats.dart';
 import 'dart:math' as math;
 
 class HomePage extends StatefulWidget {
